@@ -20,3 +20,7 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+# pip3 install 'django<4', pip install django-cloudinary-storage, pip install Pillow then env.py and import
+
