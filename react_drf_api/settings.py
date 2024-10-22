@@ -48,8 +48,10 @@ INSTALLED_APPS = [
     'cloudinary_storage',
     'django.contrib.staticfiles',
     'cloudinary',
-
+    'rest_framework',
     'profiles',
+
+
 ]
 
 MIDDLEWARE = [
@@ -136,3 +138,7 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://8000-laminsaidy-reactdrfapi-hgzcukbglad.ws.codeinstitute-ide.net',
+]
