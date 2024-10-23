@@ -1,5 +1,5 @@
 from rest_framework import generics, permissions
-from drf_api.permissions import IsOwnerOrReadOnly
+from react_drf_api.permissions import IsOwnerOrReadOnly
 from likes.models import Like
 from likes.serializers import LikeSerializer
 
