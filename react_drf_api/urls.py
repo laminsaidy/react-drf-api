@@ -15,8 +15,19 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from .views import root_route
+from .views import YourDataView
+
+
+
 
 urlpatterns = [
+path('api/auth/', include('dj_rest_auth.urls')),  
+]
+
+urlpatterns = [
+    path('yourdata/', YourDataView.as_view(), name='yourdata'),
+    path('', root_route),
     path('admin', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
     path('', include('profiles.urls')),
@@ -24,6 +35,7 @@ urlpatterns = [
     path('', include('comments.urls')),
     path('', include('likes.urls')),
     path('', include('followers.urls')),
+    path('api/auth/', include('dj_rest_auth.urls')),  
 
 
 
