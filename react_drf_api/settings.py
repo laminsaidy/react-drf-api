@@ -48,6 +48,9 @@ SIMPLE_JWT = {
 }
 
 REST_USE_JWT = True
+JWT_AUTH_COOKIE = 'my-app-auth'
+JWT_AUTH_REFRESH_COOKE = 'my-refresh-token'
+JWT_AUTH_SAMESITE = 'None'
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -57,12 +60,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-5*&3*oi2iwm2x_zo5p2@=ct1pp*32p7!0s_5ts@c&s_%zp3xi9'
+SECRET_KEY = os.getenv('SECRET_KEY')
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = 'DEV' in os.environ
 
-ALLOWED_HOSTS = ['8000-laminsaidy-reactdrfapi-hpi1869ntx6.ws.codeinstitute-ide.net']
+ALLOWED_HOSTS = ['localhost', 'my-react-drf-api.herokuapp.com']
+
 
 
 # Application definition
@@ -80,6 +85,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'dj_rest_auth',
     'rest_framework.authtoken',
+    'corsheaders',
 
     'profiles',
     'posts',
@@ -92,7 +98,9 @@ INSTALLED_APPS = [
 
 ]
 
+
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -101,6 +109,17 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+if 'CLIENT_ORIGIN' in os.environ:
+    CORS_ALLOWED_ORIGINS = [
+        os.environ.get('CLIENT_ORIGIN')
+    ]
+else:
+    CORS_ALLOWED_ORIGIN_REGEXES = [
+        r"^https://.*\.gitpod\.io$",
+    ]
+CORS_ALLOW_CREDENTIALS = True
+
 
 ROOT_URLCONF = 'react_drf_api.urls'
 
