@@ -9,6 +9,8 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
+import django_heroku
+import dj_database_url
 import re
 
 from pathlib import Path
@@ -16,6 +18,11 @@ import os
 
 if os.path.exists('env.py'):
     import env
+
+import os
+from django.core.management.utils import get_random_secret_key
+
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', get_random_secret_key())
 
 CLOUDINARY_STORAGE = {
     'CLOUDINARY_URL': os.environ.get('CLOUDINARY_URL')
@@ -29,12 +36,12 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
-    'DEFAULT_PAGINATION_CLASS':
-        'rest_framework.pagination.PageNumberPagination',
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
     'DATETIME_FORMAT': '%d %b %Y',
-
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
 }
+
 if 'DEV' not in os.environ:
     REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'] = [
         'rest_framework.renderers.JSONRenderer',
@@ -62,15 +69,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY')
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = 'DEV' in os.environ
+DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', 'my-react-drf-api.herokuapp.com',
-os.environ.get('ALLOWED_HOST')
-]
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'your-domain.com', '8000-laminsaidy-reactdrfapi-8y33fv7sp0s.ws.codeinstitute-ide.net']  
+
+
 
 
 # Application definition
@@ -151,6 +157,9 @@ WSGI_APPLICATION = 'react_drf_api.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+import dj_database_url
+import os
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -207,7 +216,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CSRF_TRUSTED_ORIGINS = [
     'https://8000-laminsaidy-reactdrfapi-hgzcukbglad.ws.codeinstitute-ide.net',
+    'http://localhost',
+    'http://127.0.0.1',
+    'https://8000-laminsaidy-reactdrfapi-8y33fv7sp0s.ws.codeinstitute-ide.net'
 ]
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
 }
+
+django_heroku.settings(locals())
