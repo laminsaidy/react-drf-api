@@ -46,6 +46,7 @@ if 'DEV' not in os.environ:
     REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'] = [
         'rest_framework.renderers.JSONRenderer',
     ]
+    
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),  # Adjust as needed
@@ -72,10 +73,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = 'DEV' in os.environ
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'your-domain.com', '8000-laminsaidy-reactdrfapi-8y33fv7sp0s.ws.codeinstitute-ide.net']  
-
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    'my-react-drf-api.herokuapp.com',  
+    '8000-laminsaidy-reactdrfapi-hgzcukbglad.ws.codeinstitute-ide.net',
+]
 
 
 
@@ -94,6 +99,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'dj_rest_auth',
     'rest_framework.authtoken',
+    'dj_rest_auth.registration',
     'corsheaders',
 
     'profiles',
@@ -118,6 +124,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+
 
 ]
 
@@ -226,13 +234,19 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://8000-laminsaidy-reactdrfapi-hgzcukbglad.ws.codeinstitute-ide.net',
+    'https://my-react-drf-api.herokuapp.com',  # Replace with your actual app name
     'http://localhost',
     'http://127.0.0.1',
-    'https://8000-laminsaidy-reactdrfapi-8y33fv7sp0s.ws.codeinstitute-ide.net'
+    'https://8000-laminsaidy-reactdrfapi-8y33fv7sp0s.ws.codeinstitute-ide.net',
 ]
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
 }
 
 django_heroku.settings(locals())
+
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^https://.*\.gitpod\.io$",
+    r"^https://my-react-drf-api.herokuapp.com$",  
+]
+CORS_ALLOW_CREDENTIALS = True
