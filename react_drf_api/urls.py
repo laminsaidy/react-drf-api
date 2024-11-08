@@ -1,47 +1,19 @@
-"""drf_api URL Configuration
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/3.2/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
 from django.urls import path, include
-from .views import root_route
-from .views import YourDataView
-from .views import root_route, logout_route
-
-
-
-
+from .views import root_route, logout_route, custom_login, YourDataView
 
 urlpatterns = [
-path('api/auth/', include('dj_rest_auth.urls')),  
-]
-
-urlpatterns = [
+    path('', root_route),  # Root route
+    path('login/', custom_login),  # Custom login
+    path('logout/', logout_route),  # Custom logout
+    path('api/auth/', include('dj_rest_auth.urls')),  # Default auth routes
     path('yourdata/', YourDataView.as_view(), name='yourdata'),
-    path('', root_route),
-    path('admin', admin.site.urls),
-    path('api-auth/', include('rest_framework.urls')),
-    path('dj-rest-auth/logout/', logout_route),
-    path('dj-rest-auth/', include('dj_rest_auth.urls')),
-    path('', include('profiles.urls')),
-    path('', include('posts.urls')),
-    path('', include('comments.urls')),
-    path('', include('likes.urls')),
-    path('', include('followers.urls')),
-    path('api/auth/', include('dj_rest_auth.urls')),  
-
-
-
-
+    path('admin/', admin.site.urls),  # Admin
+    path('api-auth/', include('rest_framework.urls')),  # DRF auth
+    path('dj-rest-auth/', include('dj_rest_auth.urls')),  # dj-rest-auth
+    path('', include('profiles.urls')),  # Include profiles URLs
+    path('', include('posts.urls')),  # Include posts URLs
+    path('', include('comments.urls')),  # Include comments URLs
+    path('', include('likes.urls')),  # Include likes URLs
+    path('', include('followers.urls')),  # Include followers URLs
 ]

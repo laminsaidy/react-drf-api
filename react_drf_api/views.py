@@ -1,22 +1,29 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serializers import YourCustomSerializer
+from rest_framework.authtoken.models import Token
+from django.contrib.auth import authenticate
 from datetime import datetime
-from .settings import (
-    JWT_AUTH_COOKIE, JWT_AUTH_REFRESH_COOKIE, JWT_AUTH_SAMESITE,
-    JWT_AUTH_SECURE,
-)
 
 
-@api_view()
-def root_route(request):
-    return Response({
-        "message": "Welcome to my drf API!"
-    })
+@api_view(['POST'])
+def custom_login(request):
+    username = request.data.get("username")
+    password = request.data.get("password")
+    user = authenticate(request, username=username, password=password)
 
+    if user is not None:
+        token, created = Token.objects.get_or_create(user=user)
+        return Response({
+            "user": {
+                "username": user.username,
+                "email": user.email,
+            },
+            "token": token.key
+        })
+    else:
+        return Response({"error": "Invalid credentials"}, status=400)
 
-# dj-rest-auth logout view fix
 @api_view(['POST'])
 def logout_route(request):
     response = Response()
@@ -40,6 +47,14 @@ def logout_route(request):
     )
     return response
 
+
+@api_view()
+def root_route(request):
+    return Response({
+        "message": "Welcome to my drf API!"
+    })
+
+
 class YourDataView(APIView):
     def get(self, request):
         data = {
@@ -48,14 +63,4 @@ class YourDataView(APIView):
             "created": datetime.now(),
             "updated": datetime.now()
         }
-        
-        serializer = YourCustomSerializer(data)
-        return Response(serializer.data)
-
-
-
-@api_view()
-def root_route(request):
-    return Response({
-        "message": "Welcome to my drf API!"
-    })
+        return Response(data)
