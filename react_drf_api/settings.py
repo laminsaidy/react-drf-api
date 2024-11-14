@@ -6,14 +6,17 @@ import os
 from datetime import timedelta
 from django.core.management.utils import get_random_secret_key
 
+# Secret key setup
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', get_random_secret_key())
 
+# Cloudinary settings
 CLOUDINARY_STORAGE = {
     'CLOUDINARY_URL': os.environ.get('CLOUDINARY_URL')
 }
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 MEDIA_URL = '/media/'
 
+# JWT settings
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
@@ -28,14 +31,16 @@ JWT_AUTH_REFRESH_COOKIE = 'my-refresh-token'
 JWT_AUTH_SAMESITE = 'None'
 JWT_AUTH_SECURE = True
 
+# Base directory path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-DEBUG = False
+# Django settings
+DEBUG = True
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     'my-react-drf-api.herokuapp.com',
-    'https://my-react-drf-api.herokuapp.com',
+    '8000-laminsaidy-reactdrfapi-hgzcukbglad.ws.codeinstitute-ide.net',
 ]
 
 INSTALLED_APPS = [
@@ -72,14 +77,15 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
+# CORS settings
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  
-    "https://blogify-react-d942246c204e.herokuapp.com",  
+    "http://localhost:3000",  # for local dev
+    "https://blogify-react-d942246c204e.herokuapp.com",  # replace with your deployed React app URL
 ]
 
 CORS_ALLOWED_ORIGIN_REGEXES = [
-    r"^https://.*\.gitpod\.io$",  
-    r"^https://my-react-drf-api.herokuapp.com",  
+    r"^https://.*\.gitpod\.io$",  # If using Gitpod
+    r"^https://my-react-drf-api.herokuapp.com",  # for Heroku
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -96,27 +102,24 @@ DATABASES = {
     }
 }
 
-# CSRF trusted origins
+
+
 CSRF_TRUSTED_ORIGINS = [
     'https://my-react-drf-api.herokuapp.com',  # For your production URL
     'http://localhost',  # For local development
     'http://127.0.0.1',  
-    'https://blogify-react-d942246c204e.herokuapp.com'
+    'https://8001-laminsaidy-reactdrfapi-u83x66feewk.ws.codeinstitute-ide.net',  # Code Institute IDE
+    'https://8000-laminsaidy-reactdrfapi-au2b3a5cu7m.ws.codeinstitute-ide.net',  # New IDE URL to fix CSRF error
 ]
 
 # Static files settings
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
-STATIC_ROOT = BASE_DIR / 'staticfiles'    # for deployment collected static files
+STATIC_ROOT = BASE_DIR / 'staticfiles'   
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# Apply Heroku settings
 django_heroku.settings(locals())
-
-# Template settings
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
